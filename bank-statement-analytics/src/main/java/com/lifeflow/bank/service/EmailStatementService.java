@@ -28,29 +28,38 @@ public class EmailStatementService {
     @Value("${lifeflow.mail.password}")
     private String password;
 
-    /**
-     * Сколько последних выписок обрабатывать.
-     */
     @Value("${lifeflow.autorun.email.lastCount:6}")
     private int lastCount;
 
     private final PdfStatementService pdfStatementService;
     private final AnalyticsService analyticsService;
 
-    /**
-     * Максимально быстрый вариант:
-     * 1) Подключаемся к Gmail.
-     * 2) Берём [Gmail]/Вся почта (или INBOX, если нет).
-     * 3) Делаем IMAP SEARCH по отправителю "vypisy@tatrabanka.sk" — это работает прямо на сервере.
-     * 4) Сортируем найденные письма по дате, берём последние N (lastCount).
-     * 5) Из каждого письма достаём PDF-выписки и считаем аналитику.
-     */
+    // 1) Старый метод — авторун, использует значения из application.yml
     public List<AnalyticsSummaryDto> fetchLastStatementsAndLogAnalytics() {
+        return fetchInternal(imapHost, username, password, lastCount);
+    }
+
+    // 2) Новый — под конкретного юзера
+    public List<AnalyticsSummaryDto> fetchLastStatementsAndLogAnalytics(
+            String imapHost,
+            String username,
+            String password,
+            int lastCount
+    ) {
+        return fetchInternal(imapHost, username, password, lastCount);
+    }
+
+    // 3) Общая реализация
+    private List<AnalyticsSummaryDto> fetchInternal(
+            String imapHost,
+            String username,
+            String password,
+            int lastCount
+    ) {
         List<AnalyticsSummaryDto> result = new ArrayList<>();
 
         Properties props = new Properties();
         props.put("mail.store.protocol", "imaps");
-        // небольшая оптимизация по IMAP:
         props.put("mail.imaps.partialfetch", "true");
 
         try {
@@ -70,17 +79,26 @@ public class EmailStatementService {
                     return result;
                 }
 
-                // ---------- 1) Быстрый серверный поиск по отправителю ----------
                 Message[] candidateMessages;
+
                 try {
                     FromTerm fromTerm = new FromTerm(new InternetAddress("vypisy@tatrabanka.sk"));
                     log.info("EmailStatementService: IMAP SEARCH by sender 'vypisy@tatrabanka.sk'");
                     candidateMessages = folder.search(fromTerm);
                     log.info("EmailStatementService: IMAP SEARCH finished, found {} messages", candidateMessages.length);
                 } catch (MessagingException searchEx) {
-                    log.error("EmailStatementService: IMAP SEARCH failed", searchEx);
-                    folder.close(false);
-                    return result;
+                    log.warn("EmailStatementService: IMAP SEARCH failed, fallback to manual scan", searchEx);
+
+                    int windowSize = Math.min(2000, total);
+                    int start = total - windowSize + 1;
+                    if (start < 1) start = 1;
+
+                    log.info("EmailStatementService: fallback scan, fetching messages {}..{} (total = {})",
+                            start, total, total);
+                    Message[] window = folder.getMessages(start, total);
+
+                    candidateMessages = filterBySender(window, "vypisy@tatrabanka.sk");
+                    log.info("EmailStatementService: fallback scan finished, found {} messages", candidateMessages.length);
                 }
 
                 if (candidateMessages.length == 0) {
@@ -89,7 +107,6 @@ public class EmailStatementService {
                     return result;
                 }
 
-                // ---------- 2) сортируем по дате: новые первыми ----------
                 Arrays.sort(candidateMessages, Comparator.comparing((Message m) -> {
                     try {
                         return m.getReceivedDate();
@@ -102,10 +119,10 @@ public class EmailStatementService {
                 log.info("EmailStatementService: will process {} latest Tatra statements (out of {})",
                         toProcess, candidateMessages.length);
 
-                // Берём только нужные N сообщений и обрабатываем их параллельно
+                // Параллельная обработка N PDF (обычно до 6 — идеально)
                 List<AnalyticsSummaryDto> summaries = Arrays.stream(candidateMessages)
                         .limit(toProcess)
-                        .parallel() // <-- магия скорости
+                        .parallel()
                         .map(msg -> {
                             String subject = safeGetSubject(msg);
                             try {
@@ -142,8 +159,35 @@ public class EmailStatementService {
     // ---------- helpers ----------
 
     /**
-     * Выбираем [Gmail]/Вся почта, если есть, иначе INBOX.
+     * Фолбэк-фильтр по отправителю, если IMAP SEARCH не сработал.
      */
+    private Message[] filterBySender(Message[] messages, String senderEmailLowercase) {
+        log.info("EmailStatementService: filtering {} messages for sender '{}'",
+                messages.length, senderEmailLowercase);
+
+        List<Message> out = new ArrayList<>();
+        String needle = senderEmailLowercase.toLowerCase(Locale.ROOT);
+
+        for (int i = 0; i < messages.length; i++) {
+            if (i % 500 == 0) {
+                log.info("EmailStatementService: filter progress {}/{}", i, messages.length);
+            }
+
+            Message msg = messages[i];
+            String fromHeader = safeGetFrom(msg);
+            if (fromHeader == null) continue;
+
+            if (fromHeader.toLowerCase(Locale.ROOT).contains(needle)) {
+                log.info("EmailStatementService: FOUND Tatra message [{}]: from='{}', subject='{}'",
+                        i, fromHeader, safeGetSubject(msg));
+                out.add(msg);
+            }
+        }
+
+        log.info("EmailStatementService: filter finished, found {} candidate messages", out.size());
+        return out.toArray(new Message[0]);
+    }
+
     private Folder resolveAllMailFolder(Store store) throws MessagingException {
         Folder defaultFolder = store.getDefaultFolder();
         for (Folder f : defaultFolder.list()) {
@@ -155,16 +199,14 @@ public class EmailStatementService {
             if (ruAll != null && ruAll.exists()) {
                 return ruAll;
             }
-        } catch (MessagingException ignored) {
-        }
+        } catch (MessagingException ignored) {}
 
         try {
             Folder allMail = store.getFolder("[Gmail]/All Mail");
             if (allMail != null && allMail.exists()) {
                 return allMail;
             }
-        } catch (MessagingException ignored) {
-        }
+        } catch (MessagingException ignored) {}
 
         Folder inbox = store.getFolder("INBOX");
         log.info("EmailStatementService: [Gmail]/All Mail not found, fallback to '{}'", inbox.getFullName());

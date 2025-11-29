@@ -29,8 +29,15 @@ public class StartupAnalyticsRunner implements CommandLineRunner {
 
         try {
             log.info("StartupAnalyticsRunner: running email analytics for last {} statements", 6);
+            long start = System.currentTimeMillis();
+
             List<AnalyticsSummaryDto> summaries = emailStatementService.fetchLastStatementsAndLogAnalytics();
+
             log.info("StartupAnalyticsRunner: got {} summaries from email", summaries.size());
+            long end = System.currentTimeMillis();
+            log.info("⏱ Endpoint /statements/last executed in {} ms ({} sec)",
+                    (end - start), (end - start) / 1000.0);
+
         } catch (Exception e) {
             log.error("StartupAnalyticsRunner: failed to run email analytics", e);
         }
