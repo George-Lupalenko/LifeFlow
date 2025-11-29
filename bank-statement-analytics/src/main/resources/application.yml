@@ -10,10 +10,15 @@ tatrabanka:
 
 lifeflow:
   autorun:
-    enabled: true
+    enabled: false #true          # старый email-раннер — включён
+    ai-enabled: false #true       # AI-раннер — включён
     email:
-      enabled: true
+      enabled: false #true
       lastCount: 6
+
+  openai:
+    api-key: ${LIFEFLOW_OPENAI_API_KEY}
+
   mail:
     imap-host: ${GMAIL_IMAP_HOST:imap.gmail.com}
     username: ${GMAIL_USERNAME}

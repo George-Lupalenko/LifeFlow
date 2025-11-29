@@ -2,10 +2,7 @@ package com.lifeflow.bank.controller;
 
 import com.lifeflow.bank.dto.AnalyticsSummaryDto;
 import com.lifeflow.bank.model.BankTransaction;
-import com.lifeflow.bank.service.AnalyticsService;
-import com.lifeflow.bank.service.EmailStatementService;
-import com.lifeflow.bank.service.LocalStatementFileService;
-import com.lifeflow.bank.service.PdfStatementService;
+import com.lifeflow.bank.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -45,15 +42,6 @@ public class AnalyticsController {
      */
     @GetMapping("/from-email")
     public List<AnalyticsSummaryDto> analyzeFromEmail() {
-        long start = System.currentTimeMillis();
-
-        List<AnalyticsSummaryDto> result =
-                emailStatementService.fetchLastStatementsAndLogAnalytics();
-
-        long end = System.currentTimeMillis();
-        log.info("⏱ Endpoint /statements/last executed in {} ms ({} sec)",
-                (end - start), (end - start) / 1000.0);
-
-        return result;
+        return emailStatementService.fetchLastStatementsAndLogAnalytics();
     }
 }
