@@ -6,8 +6,15 @@ statement:
 
 tatrabanka:
   local-statements-dir: ${TATRABANKA_LOCAL_STATEMENTS_DIR:/Users/danylo-senchyshyn/Downloads}
+  pdf-password: ${TATRABANKA_PDF_PASSWORD:}
 
 lifeflow:
   autorun:
     enabled: true
-    namePart: "89966_00_9981_2025-08-31"
+    email:
+      enabled: true
+      lastCount: 6
+  mail:
+    imap-host: ${GMAIL_IMAP_HOST:imap.gmail.com}
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_APP_PASSWORD}
