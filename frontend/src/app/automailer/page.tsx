@@ -1,7 +1,8 @@
 'use client';
 import axios from 'axios';
-import { useState } from 'react';
+import { use, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSettings } from '@/context/settings/SettingsContext';
 
 export default function AutoMailerPage() {
     const [recipient, setRecipient] = useState('');
@@ -11,27 +12,41 @@ export default function AutoMailerPage() {
     const [responseBody, setResponseBody] = useState<any>(null);
     const [isResponseOpen, setIsResponseOpen] = useState(false);
     const [isSending, setIsSending] = useState(false);
+    const {settings} = useSettings();
 
-    const predefinedRecipients = [
-        'user1@example.com',
-        'user2@example.com',
-        'user3@example.com',
-    ];
+    const [recentRecipients, setRecentRecipients] = useState<string[]>([]);
 
+    useEffect(() => {
+        const stored = localStorage.getItem("recentRecipients");
+        if (stored) {
+            setRecentRecipients(JSON.parse(stored));
+        }
+    }, []);
+
+    const saveRecentRecipients = (list: string[]) => {
+        localStorage.setItem('recentRecipients', JSON.stringify(list));
+    };
 
     const handleSendEmail = async () => {
+         if (!subject) return;
         setIsSending(true);
+
         try {
-            const promtText = `send email for ${subject} with the following email body: ${emailBody}`
+            const promtText = `send email for ${subject} with the following email body: ${emailBody} ${settings.name ? 'and' + settings.name + 'using as my name' : ''} ${settings.email ? 'and' + settings.email + 'using as my email if needed' : ''}`
             console.log(promtText)
             const response = await axios.post(process.env.NEXT_PUBLIC_AUTO_MAILER || '', {
                 prompt: promtText,
             });
 
             if (response.status === 201) {
-                console.log(response.data)
                 setResponseBody(response.data.body);
                 setIsResponseOpen(true);
+                setRecentRecipients(prev => {
+                    const updated = [...prev, subject];
+                    if (updated.length > 5) updated.shift();
+                    saveRecentRecipients(updated);
+                    return updated;
+                });
                 setRecipient('');
                 setSubject('');
                 setEmailBody('');
@@ -65,7 +80,7 @@ export default function AutoMailerPage() {
                         }}
                     >
                         <option value="">Select recipient</option>
-                        {predefinedRecipients.map((email) => (
+                        {recentRecipients.map((email) => (
                             <option key={email} value={email}>{email}</option>
                         ))}
                         <option value="custom">Enter new</option>
