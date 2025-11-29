@@ -2,10 +2,10 @@ package com.lifeflow.bank.service;
 
 import com.lifeflow.bank.dto.AnalyticsSummaryDto;
 import com.lifeflow.bank.model.BankTransaction;
-import jakarta.mail.search.FromTerm;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeUtility;
+import jakarta.mail.search.FromTerm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,9 +38,12 @@ public class EmailStatementService {
     private final AnalyticsService analyticsService;
 
     /**
-     * Ищем письма по отправителю: "vypisy@tatrabanka.sk".
-     * Сначала делаем IMAP SEARCH на сервере (быстро),
-     * если не получилось — падаем обратно на ручной проход по письмам.
+     * Максимально быстрый вариант:
+     * 1) Подключаемся к Gmail.
+     * 2) Берём [Gmail]/Вся почта (или INBOX, если нет).
+     * 3) Делаем IMAP SEARCH по отправителю "vypisy@tatrabanka.sk" — это работает прямо на сервере.
+     * 4) Сортируем найденные письма по дате, берём последние N (lastCount).
+     * 5) Из каждого письма достаём PDF-выписки и считаем аналитику.
      */
     public List<AnalyticsSummaryDto> fetchLastStatementsAndLogAnalytics() {
         List<AnalyticsSummaryDto> result = new ArrayList<>();
@@ -67,30 +70,17 @@ public class EmailStatementService {
                     return result;
                 }
 
-                // ---------- 1) Быстрая попытка: IMAP SEARCH по отправителю ----------
+                // ---------- 1) Быстрый серверный поиск по отправителю ----------
                 Message[] candidateMessages;
-
                 try {
                     FromTerm fromTerm = new FromTerm(new InternetAddress("vypisy@tatrabanka.sk"));
-                    log.info("EmailStatementService: trying IMAP SEARCH by sender 'vypisy@tatrabanka.sk'");
+                    log.info("EmailStatementService: IMAP SEARCH by sender 'vypisy@tatrabanka.sk'");
                     candidateMessages = folder.search(fromTerm);
                     log.info("EmailStatementService: IMAP SEARCH finished, found {} messages", candidateMessages.length);
                 } catch (MessagingException searchEx) {
-                    // Здесь как раз ловим твой A4 BAD Could not parse command
-                    log.warn("EmailStatementService: IMAP SEARCH failed, fallback to manual scan", searchEx);
-
-                    // ---------- 2) Фоллбэк: берём часть писем и фильтруем вручную ----------
-                    // чтобы не ходить по всем 16000, можно взять, например, последние 2000
-                    int windowSize = Math.min(2000, total);
-                    int start = total - windowSize + 1;
-                    if (start < 1) start = 1;
-
-                    log.info("EmailStatementService: fallback scan, fetching messages {}..{} (total = {})",
-                            start, total, total);
-                    Message[] window = folder.getMessages(start, total);
-
-                    candidateMessages = filterBySender(window, "vypisy@tatrabanka.sk");
-                    log.info("EmailStatementService: fallback scan finished, found {} messages", candidateMessages.length);
+                    log.error("EmailStatementService: IMAP SEARCH failed", searchEx);
+                    folder.close(false);
+                    return result;
                 }
 
                 if (candidateMessages.length == 0) {
@@ -99,17 +89,7 @@ public class EmailStatementService {
                     return result;
                 }
 
-                // ---------- отладка: последние 10 найденных ----------
-                int debugCount = Math.min(10, candidateMessages.length);
-                log.info("EmailStatementService: debug – showing last {} Tatra messages (from / subject)", debugCount);
-                for (int i = candidateMessages.length - debugCount; i < candidateMessages.length; i++) {
-                    if (i < 0) continue;
-                    Message m = candidateMessages[i];
-                    log.info("EmailStatementService: debug Tatra msg[{}]: from='{}', subject='{}'",
-                            i, safeGetFrom(m), safeGetSubject(m));
-                }
-
-                // ---------- сортируем по дате (новые первыми) ----------
+                // ---------- 2) сортируем по дате: новые первыми ----------
                 Arrays.sort(candidateMessages, Comparator.comparing((Message m) -> {
                     try {
                         return m.getReceivedDate();
@@ -122,21 +102,33 @@ public class EmailStatementService {
                 log.info("EmailStatementService: will process {} latest Tatra statements (out of {})",
                         toProcess, candidateMessages.length);
 
-                for (int i = 0; i < toProcess; i++) {
-                    Message msg = candidateMessages[i];
-                    String subject = safeGetSubject(msg);
-                    log.info("EmailStatementService: processing statement message #{}: '{}'", i, subject);
+                // Берём только нужные N сообщений и обрабатываем их параллельно
+                List<AnalyticsSummaryDto> summaries = Arrays.stream(candidateMessages)
+                        .limit(toProcess)
+                        .parallel() // <-- магия скорости
+                        .map(msg -> {
+                            String subject = safeGetSubject(msg);
+                            try {
+                                log.info("EmailStatementService: processing statement (parallel): '{}'", subject);
 
-                    List<BankTransaction> txs = extractStatementTransactionsFromMessage(msg);
-                    if (txs.isEmpty()) {
-                        log.info("EmailStatementService: message '{}' has no PDF statement attachments", subject);
-                        continue;
-                    }
+                                List<BankTransaction> txs = extractStatementTransactionsFromMessage(msg);
+                                if (txs.isEmpty()) {
+                                    log.info("EmailStatementService: message '{}' has no PDF statement attachments", subject);
+                                    return null;
+                                }
 
-                    AnalyticsSummaryDto summary = analyticsService.analyze(txs);
-                    log.info("EmailStatementService: analytics for '{}': {}", subject, summary);
-                    result.add(summary);
-                }
+                                AnalyticsSummaryDto summary = analyticsService.analyze(txs);
+                                log.info("EmailStatementService: analytics for '{}': {}", subject, summary);
+                                return summary;
+                            } catch (Exception ex) {
+                                log.error("EmailStatementService: error while processing message '{}'", subject, ex);
+                                return null;
+                            }
+                        })
+                        .filter(Objects::nonNull)
+                        .toList();
+
+                result.addAll(summaries);
 
                 folder.close(false);
             }
@@ -177,35 +169,6 @@ public class EmailStatementService {
         Folder inbox = store.getFolder("INBOX");
         log.info("EmailStatementService: [Gmail]/All Mail not found, fallback to '{}'", inbox.getFullName());
         return inbox;
-    }
-
-    /**
-     * Ручная фильтрация по отправителю, если SEARCH не сработал.
-     */
-    private Message[] filterBySender(Message[] messages, String senderEmailLowercase) {
-        log.info("EmailStatementService: filtering {} messages for sender '{}'", messages.length, senderEmailLowercase);
-        List<Message> out = new ArrayList<>();
-
-        String needle = senderEmailLowercase.toLowerCase(Locale.ROOT);
-
-        for (int i = 0; i < messages.length; i++) {
-            if (i % 500 == 0) {
-                log.info("EmailStatementService: filter progress {}/{}", i, messages.length);
-            }
-
-            Message msg = messages[i];
-            String fromHeader = safeGetFrom(msg);
-            if (fromHeader == null) continue;
-
-            if (fromHeader.toLowerCase(Locale.ROOT).contains(needle)) {
-                log.info("EmailStatementService: FOUND Tatra message [{}]: from='{}', subject='{}'",
-                        i, fromHeader, safeGetSubject(msg));
-                out.add(msg);
-            }
-        }
-
-        log.info("EmailStatementService: filter finished, found {} candidate messages", out.size());
-        return out.toArray(new Message[0]);
     }
 
     private String safeGetSubject(Message msg) {

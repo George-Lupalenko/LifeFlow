@@ -45,7 +45,15 @@ public class AnalyticsController {
      */
     @GetMapping("/from-email")
     public List<AnalyticsSummaryDto> analyzeFromEmail() {
-        log.info("Received /api/analytics/from-email");
-        return emailStatementService.fetchLastStatementsAndLogAnalytics();
+        long start = System.currentTimeMillis();
+
+        List<AnalyticsSummaryDto> result =
+                emailStatementService.fetchLastStatementsAndLogAnalytics();
+
+        long end = System.currentTimeMillis();
+        log.info("⏱ Endpoint /statements/last executed in {} ms ({} sec)",
+                (end - start), (end - start) / 1000.0);
+
+        return result;
     }
 }
