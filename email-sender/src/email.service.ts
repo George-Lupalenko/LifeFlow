@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 @Injectable()
 export class EmailService {
-  private genAI: GoogleGenerativeAI;
-  private model;
+  private apiKey: string;
 
   constructor(private configService: ConfigService) {
-    // Initialize Gemini API - you'll need to set GEMINI_API_KEY in your environment
-    const apiKey = this.configService.get<string>('GEMINI_API_KEY') || '';
-    this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    // Initialize OpenAI API - you'll need to set OPENAI_API_KEY in your environment
+    this.apiKey = this.configService.get<string>('OPENAI_API_KEY') || '';
   }
 
   /**
@@ -24,17 +22,17 @@ export class EmailService {
   }
 
   /**
-   * Generate cold email body using Gemini API
+   * Generate cold email body using OpenAI via Vercel AI SDK
    */
   async generateColdEmail(prompt: string): Promise<string> {
     try {
-      const result = await this.model.generateContent(
-        `Generate a professional cold email based on this request: "${prompt}".
+      const { text } = await generateText({
+        model: openai('gpt-4o-mini'),
+        prompt: `Generate a professional cold email based on this request: "${prompt}".
         Only return the email body text, without subject line, greetings can be included.
         Make it concise and professional.`,
-      );
-      const response = result.response;
-      return response.text();
+      });
+      return text;
     } catch (error) {
       throw new Error(`Failed to generate email: ${error.message}`);
     }
