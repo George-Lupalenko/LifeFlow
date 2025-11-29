@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+statement:
+  dir: ${STATEMENT_DIR:/Users/danylo-senchyshyn/Downloads}
+
+tatrabanka:
+  local-statements-dir: ${TATRABANKA_LOCAL_STATEMENTS_DIR:/Users/danylo-senchyshyn/Downloads}
+
+lifeflow:
+  autorun:
+    enabled: true
+    namePart: "89966_00_9981_2025-08-31"
