@@ -10,7 +10,6 @@ export default function MainPage() {
     { href: '/automailer', label: 'AutoMailer' },
     { href: '/events', label: 'Event Planner' },
     { href: '/booking', label: 'Booker' },
-    { href: '/profile', label: 'Profile' },
   ];
 
   return (
