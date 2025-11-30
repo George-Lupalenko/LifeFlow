@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class GPTAnalyticsService {
 
-    @Value("${lifeflow.openai.api-key}")
+    @Value("${LIFEFLOW_OPENAI_API_KEY}")
     private String apiKey;
 
     private final ObjectMapper objectMapper;
