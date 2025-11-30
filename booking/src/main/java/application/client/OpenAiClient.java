@@ -22,12 +22,12 @@ import java.util.Map;
         matchIfMissing = true
 )@Slf4j
 public class OpenAiClient implements AiClient {
-    
+
     private final WebClient webClient;
     private final String apiKey;
     private final String model;
     private static final String OPENAI_API_BASE_URL = "https://api.openai.com/v1";
-    
+
     public OpenAiClient(@Value("${openai.api.key}") String apiKey,
                        @Value("${openai.model:gpt-4o-mini}") String model) {
         // Create OpenAI WebClient with authentication
@@ -40,7 +40,7 @@ public class OpenAiClient implements AiClient {
         this.model = model;
         log.info("OpenAI Client initialized with model: {}", model);
     }
-    
+
     /**
      * Extract travel intent from natural language query using OpenAI
      */
@@ -50,17 +50,17 @@ public class OpenAiClient implements AiClient {
         String prompt = userQueryOrPrompt.length() < 200 && !userQueryOrPrompt.contains("Extract travel information") ?
             String.format(
                 "Extract travel information from this query and return ONLY valid JSON with these fields: " +
-                "originLocation (city or IATA code), destinationLocation (city or IATA code), " +
+                "originLocation (city or IATA code), destinationLocation (city or IATA code),originCountry, destinationCountry,  " +
                 "departureDate (YYYY-MM-DD), returnDate (YYYY-MM-DD or null), " +
                 "numberOfAdults (integer), numberOfChildren (integer), " +
                 "maxBudget (number or null), preferredClass (ECONOMY/BUSINESS/FIRST or null), " +
                 "preferences (string with any special requirements). " +
                 "User query: %s", userQueryOrPrompt
             ) : userQueryOrPrompt;
-        
+
         return callOpenAI(prompt);
     }
-    
+
     /**
      * Call OpenAI API with a custom prompt
      */
@@ -72,7 +72,7 @@ public class OpenAiClient implements AiClient {
         ));
         requestBody.put("temperature", 0.3);
         requestBody.put("response_format", Map.of("type", "json_object"));
-        
+
         return webClient.post()
                 .uri("/chat/completions")
                 .bodyValue(requestBody)
@@ -99,7 +99,7 @@ public class OpenAiClient implements AiClient {
                 .doOnError(error -> log.error("Error calling OpenAI API", error))
                 .onErrorReturn("{}");
     }
-    
+
     /**
      * Generate personalized travel recommendations
      */
@@ -114,14 +114,14 @@ public class OpenAiClient implements AiClient {
             "Be concise and helpful.",
             travelContext, flightOptions, hotelOptions
         );
-        
+
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", model);
         requestBody.put("messages", List.of(
             Map.of("role", "user", "content", prompt)
         ));
         requestBody.put("temperature", 0.7);
-        
+
         return webClient.post()
                 .uri("/chat/completions")
                 .bodyValue(requestBody)

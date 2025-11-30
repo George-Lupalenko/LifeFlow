@@ -1,5 +1,6 @@
 package application.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,50 +16,57 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TravelIntent {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
     private String userId;
-    
+
     @Column(nullable = false, length = 1000)
-    private String userQuery; // Natural language query from user
-    
+    private String userQuery;
+
     @Column(nullable = false)
-    private String originLocation; // IATA code or city name
-    
+    private String originLocation;
+
+    @Column
+    private String originCountry;
+
+    @Column
+    private String destinationCountry;
+
     @Column(nullable = false)
-    private String destinationLocation; // IATA code or city name
-    
+    private String destinationLocation;
+
     @Column(nullable = false)
     private LocalDate departureDate;
-    
-    private LocalDate returnDate; // Optional for round trips
-    
+
+    private LocalDate returnDate;
+
     private Integer numberOfAdults = 1;
-    
+
     private Integer numberOfChildren = 0;
-    
-    private Double maxBudget; // Optional budget constraint
-    
-    private String preferredClass; // ECONOMY, BUSINESS, FIRST
-    
+
+    private Double maxBudget;
+
+    private String preferredClass;
+
     @Column(length = 2000)
-    private String aiExtractedPreferences; // JSON string of AI-extracted preferences
-    
+    private String aiExtractedPreferences;
+
     @Enumerated(EnumType.STRING)
     private IntentStatus status = IntentStatus.PENDING;
-    
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
-    
+
     private LocalDateTime processedAt;
-    
+
     @OneToMany(mappedBy = "travelIntent", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "intent-itineraries")
     private List<Itinerary> itineraries;
-    
+
     public enum IntentStatus {
         PENDING, PROCESSING, COMPLETED, FAILED
     }
