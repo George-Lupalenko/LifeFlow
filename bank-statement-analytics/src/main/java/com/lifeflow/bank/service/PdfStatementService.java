@@ -19,12 +19,6 @@ public class PdfStatementService {
 
     private final TatraStatementParser parser;
 
-    @Value("${tatrabanka.pdf-password:}")
-    private String pdfPassword;
-
-    @Value("${tatrabanka.pdf-password:}")
-    private String defaultPdfPassword;
-
     /**
      * Расшифровать PDF и распарсить транзакции. Ничего не сохраняем.
      */
