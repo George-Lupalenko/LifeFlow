@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-auto overflow-x-hidden flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black/5 overflow-auto overflow-x-hidden flex flex-col min-h-screen`}
       >
         <SettingsProvider>
           <Header />
