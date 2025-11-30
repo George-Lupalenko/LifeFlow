@@ -6,7 +6,7 @@ export interface UserSettings {
   name: string;
   email: string;
   bankEmail: string;
-  bankEmailPassword: string;
+  bankPassword: string;
   bankEmailAppPassword: string;
 }
 
@@ -23,7 +23,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     name: "",
     email: "",
     bankEmail: "",
-    bankEmailPassword: "",
+    bankPassword: "",
     bankEmailAppPassword: "",
   });
 

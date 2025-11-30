@@ -22,11 +22,17 @@ export default function ProfilePage() {
     setLocalSettings(settings);
   }, [settings]);
 
-   const handleFieldChange = (field: keyof UserSettings, value: any) => {
+  const handleFieldChange = (field: keyof UserSettings, value: any) => {
+    if (field === "bankEmailAppPassword") {
+      value = value.replace(/\s+/g, "");
+    } else if (field.length > 16) {
+      value = value.slice(0, 16);
+    }
     setLocalSettings((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
+    if(localSettings.bankEmailAppPassword.length === 16)
     setSettings(localSettings);
     setSaved(true);
     setTimeout(() => setSaved(false), 1000);
@@ -44,10 +50,9 @@ export default function ProfilePage() {
               onClick={() => setActiveTab(tab.id)}
               className={`
                 flex-1 px-6 py-2 text-center transition-all duration-200
-                ${
-                  activeTab === tab.id
-                    ? "bg-gray-900 text-white font-semibold border-b-2 border-purple-500"
-                    : "text-gray-400 hover:bg-gray-700"
+                ${activeTab === tab.id
+                  ? "bg-gray-900 text-white font-semibold border-b-2 border-purple-500"
+                  : "text-gray-400 hover:bg-gray-700"
                 }
               `}
             >
@@ -94,8 +99,8 @@ export default function ProfilePage() {
                 <label className="block font-semibold mb-1">Bank Email Password</label>
                 <input
                   type="password"
-                  value={localSettings.bankEmailPassword}
-                  onChange={(e) => handleFieldChange("bankEmailPassword", e.target.value)}
+                  value={localSettings.bankPassword}
+                  onChange={(e) => handleFieldChange("bankPassword", e.target.value)}
                   className="w-full bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
