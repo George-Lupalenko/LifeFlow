@@ -9,7 +9,7 @@ public class BookingApplication {
 
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.configure()
-                .directory("D:/Java/LifeFlow/booking") // путь к папке с .env
+                .directory("D:/Java/LifeFlow/booking/src/main/resources") // путь к папке с .env
                 .load(); // загрузка .env
         System.setProperty("OPENAI_API_KEY", dotenv.get("OPENAI_API_KEY"));
         System.setProperty("AMADEUS_API_KEY", dotenv.get("AMADEUS_API_KEY"));

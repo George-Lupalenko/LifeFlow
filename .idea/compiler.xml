@@ -14,6 +14,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="booking-service" target="21" />
+      <module name="lifeflow" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
