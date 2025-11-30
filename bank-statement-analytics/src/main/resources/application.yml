@@ -1,13 +1,6 @@
 server:
   port: 8081
 
-statement:
-  dir: ${STATEMENT_DIR:/Users/danylo-senchyshyn/Downloads}
-
-tatrabanka:
-  local-statements-dir: ${TATRABANKA_LOCAL_STATEMENTS_DIR:/Users/danylo-senchyshyn/Downloads}
-  pdf-password: ${TATRABANKA_PDF_PASSWORD:}
-
 lifeflow:
   autorun:
     enabled: false #true          # старый email-раннер — включён
@@ -18,8 +11,3 @@ lifeflow:
 
   openai:
     api-key: ${LIFEFLOW_OPENAI_API_KEY}
-
-  mail:
-    imap-host: ${GMAIL_IMAP_HOST:imap.gmail.com}
-    username: ${GMAIL_USERNAME}
-    password: ${GMAIL_APP_PASSWORD}

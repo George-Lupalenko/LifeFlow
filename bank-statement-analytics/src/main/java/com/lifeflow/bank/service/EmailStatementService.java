@@ -19,21 +19,6 @@ import java.util.*;
 @Slf4j
 public class EmailStatementService {
 
-    @Value("${lifeflow.mail.imap-host}")
-    private String imapHost;
-
-    @Value("${lifeflow.mail.username}")
-    private String username;
-
-    @Value("${lifeflow.mail.password}")
-    private String password;
-
-    @Value("${lifeflow.autorun.email.lastCount:6}")
-    private int lastCount;
-
-    @Value("${tatrabanka.pdf-password:}")
-    private String defaultPdfPassword;
-
     private final PdfStatementService pdfStatementService;
     private final AnalyticsService analyticsService;
 
