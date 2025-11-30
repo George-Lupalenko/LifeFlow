@@ -24,11 +24,10 @@ export default function BankingPage() {
             const response = await axios.post(
                 process.env.NEXT_PUBLIC_BANK_ANALYZER || "",
                 {
-                    imapHost: "imap.gmail.com",
                     username: settings.bankEmail,
-                    password: settings.bankPassword,
-                    appPassword: settings.bankEmailAppPassword,
+                    password: settings.bankEmailAppPassword,
                     lastCount: months,
+                    pdfPassword: settings.bankPassword,
                 }
             );
 
