@@ -2,87 +2,87 @@ package com.lifeflow.bank.model;
 
 public enum CategoryResult {
 
-    // ДОХОДЫ
-    INCOME_SALARY("INCOME_SALARY", "Зарплата"),
-    INCOME_FREELANCE("INCOME_FREELANCE", "Подработка / фриланс"),
-    INCOME_PASSIVE("INCOME_PASSIVE", "Пассивный доход"),
-    INCOME_OTHER("INCOME_OTHER", "Прочие доходы"),
-    INCOME_REFUND("INCOME_REFUND", "Возвраты / рефанд"),
+    // INCOME
+    INCOME_SALARY("INCOME_SALARY", "Salary"),
+    INCOME_FREELANCE("INCOME_FREELANCE", "Freelance / Side Jobs"),
+    INCOME_PASSIVE("INCOME_PASSIVE", "Passive Income"),
+    INCOME_OTHER("INCOME_OTHER", "Other Income"),
+    INCOME_REFUND("INCOME_REFUND", "Refunds"),
 
-    // ЖИЛЬЁ
-    HOUSING_RENT("HOUSING_RENT", "Аренда / ипотека"),
-    HOUSING_UTILS("HOUSING_UTILS", "Коммунальные услуги"),
-    HOUSING_INTERNET_TV("HOUSING_INTERNET_TV", "Интернет / ТВ / телефон"),
-    HOUSING_MAINTENANCE("HOUSING_MAINTENANCE", "Ремонт и обслуживание"),
+    // HOUSING
+    HOUSING_RENT("HOUSING_RENT", "Rent / Mortgage"),
+    HOUSING_UTILS("HOUSING_UTILS", "Utilities"),
+    HOUSING_INTERNET_TV("HOUSING_INTERNET_TV", "Internet / TV / Phone"),
+    HOUSING_MAINTENANCE("HOUSING_MAINTENANCE", "Maintenance / Repairs"),
 
-    // ЕДА
-    FOOD_GROCERIES("FOOD_GROCERIES", "Продукты"),
-    FOOD_RESTAURANT("FOOD_RESTAURANT", "Рестораны / кафе"),
-    FOOD_DELIVERY("FOOD_DELIVERY", "Доставка еды"),
-    FOOD_COFFEE_SNACKS("FOOD_COFFEE_SNACKS", "Кофе / снеки"),
+    // FOOD
+    FOOD_GROCERIES("FOOD_GROCERIES", "Groceries"),
+    FOOD_RESTAURANT("FOOD_RESTAURANT", "Restaurants / Cafes"),
+    FOOD_DELIVERY("FOOD_DELIVERY", "Food Delivery"),
+    FOOD_COFFEE_SNACKS("FOOD_COFFEE_SNACKS", "Coffee / Snacks"),
 
-    // ТРАНСПОРТ / АВТО
-    TRANSPORT_PUBLIC("TRANSPORT_PUBLIC", "Общественный транспорт"),
-    TRANSPORT_TAXI("TRANSPORT_TAXI", "Такси / каршеринг"),
-    TRANSPORT_FUEL("TRANSPORT_FUEL", "Топливо"),
-    TRANSPORT_PARKING("TRANSPORT_PARKING", "Парковка / платные дороги"),
-    CAR_SERVICE("CAR_SERVICE", "Сервис / ремонт авто"),
-    CAR_INSURANCE("CAR_INSURANCE", "Страховка авто"),
+    // TRANSPORT
+    TRANSPORT_PUBLIC("TRANSPORT_PUBLIC", "Public Transport"),
+    TRANSPORT_TAXI("TRANSPORT_TAXI", "Taxi / Carsharing"),
+    TRANSPORT_FUEL("TRANSPORT_FUEL", "Fuel"),
+    TRANSPORT_PARKING("TRANSPORT_PARKING", "Parking / Toll Roads"),
+    CAR_SERVICE("CAR_SERVICE", "Car Service / Repairs"),
+    CAR_INSURANCE("CAR_INSURANCE", "Car Insurance"),
 
-    // ЗДОРОВЬЕ И СПОРТ
-    HEALTH_MEDICINE("HEALTH_MEDICINE", "Аптеки / лекарства"),
-    HEALTH_DOCTOR("HEALTH_DOCTOR", "Врачи / клиники"),
-    HEALTH_FITNESS("HEALTH_FITNESS", "Спортзал / фитнес"),
-    HEALTH_SPA("HEALTH_SPA", "SPA / массаж"),
+    // HEALTH & SPORTS
+    HEALTH_MEDICINE("HEALTH_MEDICINE", "Medicine / Pharmacy"),
+    HEALTH_DOCTOR("HEALTH_DOCTOR", "Doctors / Clinics"),
+    HEALTH_FITNESS("HEALTH_FITNESS", "Gym / Fitness"),
+    HEALTH_SPA("HEALTH_SPA", "SPA / Massage"),
 
-    // ШОПИНГ / ЛИЧНОЕ
-    SHOPPING_CLOTHES("SHOPPING_CLOTHES", "Одежда / обувь"),
-    SHOPPING_ELECTRONICS("SHOPPING_ELECTRONICS", "Электроника / гаджеты"),
-    SHOPPING_BEAUTY("SHOPPING_BEAUTY", "Косметика / уход"),
-    SHOPPING_HOME("SHOPPING_HOME", "Домашние товары"),
-    SHOPPING_HOBBY("SHOPPING_HOBBY", "Хобби / DIY"),
+    // SHOPPING
+    SHOPPING_CLOTHES("SHOPPING_CLOTHES", "Clothes / Shoes"),
+    SHOPPING_ELECTRONICS("SHOPPING_ELECTRONICS", "Electronics / Gadgets"),
+    SHOPPING_BEAUTY("SHOPPING_BEAUTY", "Beauty / Care"),
+    SHOPPING_HOME("SHOPPING_HOME", "Home Goods"),
+    SHOPPING_HOBBY("SHOPPING_HOBBY", "Hobby / DIY"),
 
-    // СЕМЬЯ / ДЕТИ
-    FAMILY_KIDS("FAMILY_KIDS", "Дети / школа / кружки"),
-    FAMILY_GENERAL("FAMILY_GENERAL", "Семейные расходы"),
+    // FAMILY
+    FAMILY_KIDS("FAMILY_KIDS", "Kids / School / Activities"),
+    FAMILY_GENERAL("FAMILY_GENERAL", "Family Expenses"),
 
-    // ОБУЧЕНИЕ
-    EDUCATION("EDUCATION", "Обучение / курсы / книги"),
+    // EDUCATION
+    EDUCATION("EDUCATION", "Education / Courses / Books"),
 
-    // РАЗВЛЕЧЕНИЯ
-    ENTERTAINMENT("ENTERTAINMENT", "Развлечения / кино / игры"),
-    BARS_NIGHTLIFE("BARS_NIGHTLIFE", "Бары / ночная жизнь"),
+    // ENTERTAINMENT
+    ENTERTAINMENT("ENTERTAINMENT", "Entertainment / Movies / Games"),
+    BARS_NIGHTLIFE("BARS_NIGHTLIFE", "Bars / Nightlife"),
 
-    // ПУТЕШЕСТВИЯ
-    TRAVEL_TRANSPORT("TRAVEL_TRANSPORT", "Путешествия: транспорт"),
-    TRAVEL_STAY("TRAVEL_STAY", "Путешествия: жильё"),
-    TRAVEL_OTHER("TRAVEL_OTHER", "Путешествия: прочее"),
+    // TRAVEL
+    TRAVEL_TRANSPORT("TRAVEL_TRANSPORT", "Travel: Transport"),
+    TRAVEL_STAY("TRAVEL_STAY", "Travel: Stay"),
+    TRAVEL_OTHER("TRAVEL_OTHER", "Travel: Other"),
 
-    // ПОДПИСКИ / ЦИФРА
-    SUBSCRIPTION_MEDIA("SUBSCRIPTION_MEDIA", "Подписки: медиа (Netflix, Spotify)"),
-    SUBSCRIPTION_SOFTWARE("SUBSCRIPTION_SOFTWARE", "Подписки: софт / сервисы"),
-    SUBSCRIPTION_MOBILE("SUBSCRIPTION_MOBILE", "Подписки: мобильная связь / интернет"),
-    SUBSCRIPTION_OTHER("SUBSCRIPTION_OTHER", "Подписки: прочее"),
+    // SUBSCRIPTIONS
+    SUBSCRIPTION_MEDIA("SUBSCRIPTION_MEDIA", "Subscriptions: Media"),
+    SUBSCRIPTION_SOFTWARE("SUBSCRIPTION_SOFTWARE", "Subscriptions: Software"),
+    SUBSCRIPTION_MOBILE("SUBSCRIPTION_MOBILE", "Subscriptions: Mobile / Internet"),
+    SUBSCRIPTION_OTHER("SUBSCRIPTION_OTHER", "Subscriptions: Other"),
 
-    // ФИНАНСЫ / ГОСУДАРСТВО
-    FEES_BANK("FEES_BANK", "Банковские комиссии"),
-    FEES_TAXES("FEES_TAXES", "Налоги / гос.сборы"),
-    FEES_FINANCIAL("FEES_FINANCIAL", "Финансовые услуги"),
+    // FEES / FINANCE / GOVERNMENT
+    FEES_BANK("FEES_BANK", "Bank Fees"),
+    FEES_TAXES("FEES_TAXES", "Taxes / Government Fees"),
+    FEES_FINANCIAL("FEES_FINANCIAL", "Financial Services"),
 
-    // ПОДАРКИ / ДОНАТЫ
-    GIFTS("GIFTS", "Подарки"),
-    DONATIONS("DONATIONS", "Благотворительность / донаты"),
+    // GIFTS / DONATIONS
+    GIFTS("GIFTS", "Gifts"),
+    DONATIONS("DONATIONS", "Donations"),
 
-    // ПИТОМЦЫ
-    PETS("PETS", "Питомцы"),
+    // PETS
+    PETS("PETS", "Pets"),
 
-    // БИЗНЕС / РАБОТА
-    BUSINESS_EXPENSE("BUSINESS_EXPENSE", "Рабочие расходы"),
-    BUSINESS_SUBSCRIPTION("BUSINESS_SUBSCRIPTION", "Подписки для работы"),
+    // BUSINESS
+    BUSINESS_EXPENSE("BUSINESS_EXPENSE", "Business Expenses"),
+    BUSINESS_SUBSCRIPTION("BUSINESS_SUBSCRIPTION", "Business Subscriptions"),
 
-    // ОБЩЕЕ / ПО УМОЛЧАНИЮ
-    TRANSFER("TRANSFER", "Переводы"),
-    OTHER("OTHER", "Прочее");
+    // GENERAL
+    TRANSFER("TRANSFER", "Transfers"),
+    OTHER("OTHER", "Other");
 
     private final String code;
     private final String displayName;
