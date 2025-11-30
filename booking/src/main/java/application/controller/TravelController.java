@@ -12,6 +12,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/travel")
+@CrossOrigin("*")
 public class TravelController {
 
     private final AiService aiService;
