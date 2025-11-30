@@ -26,67 +26,70 @@ public class GPTAnalyticsService {
     private final OkHttpClient client = new OkHttpClient();
 
     private static final String PROMPT = """
-Ты — финансовый аналитик. На вход тебе передаётся массив JSON-объектов. Каждый объект — это агрегированная статистика по тратам за один месяц.
+You are a financial analyst. You receive an array of JSON objects. Each object represents aggregated spending statistics for one month.
 
-Формат одного элемента массива:
+Format of a single element in the array:
 {
-  "totalExpenses": number,        // общая сумма расходов за месяц
-  "totalIncome": number,          // общая сумма доходов за месяц
-  "restaurantExpenses": number,   // расходы на рестораны
-  "foodExpenses": number,         // расходы на продукты
-  "subscriptionsExpenses": number,// расходы на подписки
+  "totalExpenses": number,        
+  "totalIncome": number,          
+  "restaurantExpenses": number,   
+  "foodExpenses": number,         
+  "subscriptionsExpenses": number,
   "categories": [
-    {
-      "code": string,             // код категории (например, FOOD_GROCERIES, OTHER)
-      "name": string,             // человекочитаемое название категории
-      "amount": number,           // сумма трат по категории
-      "percentage": number        // доля категории в общих расходах (в процентах)
-    },
-    ...
-  ]
-}
-
-Важно:
-- Ты НЕ видишь отдельных транзакций, только агрегированные данные по месяцам.
-- Тебе нужно проанализировать ДИНАМИКУ за несколько месяцев и дать человеку понятный, короткий, но содержательный обзор.
-
-Формат ТВОЕГО ответа (строго один JSON-объект, без текста до или после):
-
-{
-  "monthsCount": number,                 // сколько месяцев в массиве
-  "avgMonthlyExpenses": number,          // средние расходы в месяц (округли до 2 знаков)
-  "avgMonthlyIncome": number,           // средние доходы в месяц (округли до 2 знаков)
-  "savingsTrend": string,               // короткий вывод: "растёт", "падает" или "стабильно"
-  "topSpendingCategories": [            // 3–5 ключевых категорий по средним расходам за период
     {
       "code": string,
       "name": string,
-      "avgAmount": number,              // средний расход в месяц по категории
-      "shareOfTotal": number            // средняя доля от всех расходов в %
+      "amount": number,
+      "percentage": number
+    }
+  ]
+}
+
+Important:
+- You DO NOT see individual transactions, only aggregated monthly summaries.
+- You must analyze MULTI-MONTH TRENDS and produce a clear, short but insightful overview.
+
+Your response must be EXACTLY ONE JSON OBJECT. No explanations, no text before or after.
+
+Return strictly the following format:
+
+{
+  "monthsCount": number,
+  "avgMonthlyExpenses": number,
+  "avgMonthlyIncome": number,
+  "savingsTrend": string,                
+  "topSpendingCategories": [
+    {
+      "code": string,
+      "name": string,
+      "avgAmount": number,
+      "shareOfTotal": number
     }
   ],
-  "subscriptionsShare": {               // агрегированная аналитика по подпискам
-    "avgSubscriptionsAmount": number,   // средние траты на подписки в месяц
-    "avgSubscriptionsSharePercent": number, // средняя доля подписок в расходах, %
-    "comment": string                   // короткий вывод: "подписки почти не чувствительны", "заметная статья расходов", и т.п.
+  "subscriptionsShare": {
+    "avgSubscriptionsAmount": number,
+    "avgSubscriptionsSharePercent": number,
+    "comment": string
   },
-  "foodAndRestaurants": {               // еда и рестораны
+  "foodAndRestaurants": {
     "avgFoodAmount": number,
     "avgRestaurantAmount": number,
     "comment": string
   },
-  "keyInsights": [                      // 3–7 главных инсайтов на человеческом языке
+  "keyInsights": [
     string
   ],
-  "suggestedActions": [                 // 3–7 конкретных рекомендаций, что можно сделать
+  "suggestedActions": [
     string
   ]
 }
 
-Требования:
-- ВСЕГДА возвращай строго валидный JSON, без комментариев, без лишнего текста.
-- Числа округляй до двух знаков после запятой.
-- Пиши по-русски, в дружелюбном тоне, но без воды.
+Rules:
+- ALWAYS respond in English.
+- ALWAYS return strictly valid JSON.
+- No comments, no surrounding text.
+- Round all numbers to 2 decimal places.
+- Tone: friendly, concise, professional.
 """;
 
     public String generateAnalytics(Object summariesJson) {
