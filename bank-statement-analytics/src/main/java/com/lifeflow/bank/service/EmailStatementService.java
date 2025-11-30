@@ -31,22 +31,21 @@ public class EmailStatementService {
     @Value("${lifeflow.autorun.email.lastCount:6}")
     private int lastCount;
 
+    @Value("${tatrabanka.pdf-password:}")
+    private String defaultPdfPassword;
+
     private final PdfStatementService pdfStatementService;
     private final AnalyticsService analyticsService;
 
-    // 1) Старый метод — авторун, использует значения из application.yml
-    public List<AnalyticsSummaryDto> fetchLastStatementsAndLogAnalytics() {
-        return fetchInternal(imapHost, username, password, lastCount);
-    }
-
     // 2) Новый — под конкретного юзера
     public List<AnalyticsSummaryDto> fetchLastStatementsAndLogAnalytics(
-            String imapHost,
             String username,
             String password,
-            int lastCount
+            int lastCount,
+            String pdfPassword
     ) {
-        return fetchInternal(imapHost, username, password, lastCount);
+        String host = "imap.gmail.com";
+        return fetchInternal(host, username, password, lastCount, pdfPassword);
     }
 
     // 3) Общая реализация
@@ -54,7 +53,8 @@ public class EmailStatementService {
             String imapHost,
             String username,
             String password,
-            int lastCount
+            int lastCount,
+            String pdfPassword
     ) {
         List<AnalyticsSummaryDto> result = new ArrayList<>();
 
@@ -119,7 +119,6 @@ public class EmailStatementService {
                 log.info("EmailStatementService: will process {} latest Tatra statements (out of {})",
                         toProcess, candidateMessages.length);
 
-                // Параллельная обработка N PDF (обычно до 6 — идеально)
                 List<AnalyticsSummaryDto> summaries = Arrays.stream(candidateMessages)
                         .limit(toProcess)
                         .parallel()
@@ -128,7 +127,7 @@ public class EmailStatementService {
                             try {
                                 log.info("EmailStatementService: processing statement (parallel): '{}'", subject);
 
-                                List<BankTransaction> txs = extractStatementTransactionsFromMessage(msg);
+                                List<BankTransaction> txs = extractStatementTransactionsFromMessage(msg, pdfPassword);
                                 if (txs.isEmpty()) {
                                     log.info("EmailStatementService: message '{}' has no PDF statement attachments", subject);
                                     return null;
@@ -236,7 +235,10 @@ public class EmailStatementService {
     /**
      * Достаём все PDF-вложения из письма и парсим их как Tatra-выписки.
      */
-    private List<BankTransaction> extractStatementTransactionsFromMessage(Message msg) throws Exception {
+    private List<BankTransaction> extractStatementTransactionsFromMessage(
+            Message msg,
+            String pdfPassword
+    ) throws Exception {
         List<BankTransaction> allTxs = new ArrayList<>();
 
         Object content = msg.getContent();
@@ -259,7 +261,8 @@ public class EmailStatementService {
 
                 log.info("EmailStatementService: found PDF attachment '{}'", decodedName);
                 try (InputStream is = bp.getInputStream()) {
-                    List<BankTransaction> txs = pdfStatementService.parseTatraStatementPdf(is);
+                    // 🔴 ВАЖНО: тут нужно, чтобы PdfStatementService умел принимать пароль
+                    List<BankTransaction> txs = pdfStatementService.parseTatraStatementPdf(is, pdfPassword);
                     log.info("EmailStatementService: parsed {} transactions from '{}'",
                             txs.size(), decodedName);
                     allTxs.addAll(txs);
