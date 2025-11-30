@@ -54,11 +54,11 @@ public class AiService {
     }
 
     private List<String> generateFakeHotels(String city, int days) {
-        int base = 50 + random.nextInt(80); // цена за ночь
+        int base = 50 + random.nextInt(80);
         return List.of(
-                "🏨 Hotel Skyline " + city + " — $" + (base * days) + " for " + days + " nights",
-                "🏨 Central Inn " + city + " — $" + ((base + 30) * days),
-                "🏨 Luxury Suites " + city + " — $" + ((base + 60) * days)
+                "🏨 Hotel Skyline " + city + " — $" + (base * days) + " for " + days + " nights"+ "https://www.booking.com/" + city.toLowerCase() + "/hotel-skyline/d65667bc69ec1ef",
+                "🏨 Central Inn " + city + " — $" + ((base + 30) * days) + "https://www.booking.com/" + city.toLowerCase() + "/central-inn/d66bc69ec1ef",
+                "🏨 Luxury Suites " + city + " — $" + ((base + 60) * days)+ "https://www.booking.com/" + city.toLowerCase() + "/luxury/d66bc69ec1ef26728104"
         );
     }
 
