@@ -20,7 +20,6 @@ public class AnalyticsController {
 
     private final PdfStatementService pdfStatementService;
     private final AnalyticsService analyticsService;
-    private final LocalStatementFileService localStatementFileService;
     private final EmailStatementService emailStatementService;
 
 //    @GetMapping("/from-local")
