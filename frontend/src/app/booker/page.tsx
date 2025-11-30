@@ -17,10 +17,10 @@ export default function BookerPage() {
 
     try {
       const res = await axios.post(process.env.NEXT_PUBLIC_BOOKER || '', {
-        prompt,
+        query: prompt,
       });
-
-      setResponseText(res.data.text || JSON.stringify(res.data));
+        console.log(res)
+      setResponseText(res.data.aiRecommendation || JSON.stringify(res.data));
       setModal({ type: 'success', message: 'Plan generated successfully!' });
     } catch (err) {
       setModal({ type: 'error', message: 'Failed to generate plan.' });
@@ -53,7 +53,6 @@ export default function BookerPage() {
         {loading ? 'Generating...' : 'Generate Plan'}
       </button>
 
-      {/* ------------------------- Loading Overlay ------------------------- */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
           <div className="bg-white/10 border border-white/30 p-8 rounded-2xl shadow-xl flex flex-col items-center gap-4">
@@ -63,7 +62,6 @@ export default function BookerPage() {
         </div>
       )}
 
-      {/* ------------------------- Success/Error Modal ------------------------- */}
       {modal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
           <div className="bg-gray-900 border border-white/20 p-8 rounded-2xl shadow-xl text-center w-80">
@@ -87,7 +85,6 @@ export default function BookerPage() {
         </div>
       )}
 
-      {/* ------------------------- Result Block ------------------------- */}
       {responseText && (
         <div className="mt-10 p-6 bg-gray-900 border border-white/10 rounded-xl text-white">
           <h2 className="text-xl font-bold mb-4">Generated Travel Plan:</h2>

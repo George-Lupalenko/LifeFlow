@@ -30,27 +30,19 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/events"
-            className="px-4 py-2 rounded-xl font-bold hover:bg-white hover:text-black transition-all duration-300"
-          >
-            Event Planner
-          </Link>
-
-          <Link
             href="/booker"
             className="px-4 py-2 rounded-xl font-bold hover:bg-white hover:text-black transition-all duration-300"
           >
             Booker
           </Link>
         </div>
-        
 
-          <Link
-            href="/profile"
-            className="px-4 py-2 rounded-xl font-bold hover:bg-white hover:text-black transition-all duration-300"
-          >
-            Profile
-          </Link>
+        <Link
+          href="/profile"
+          className="px-4 py-2 rounded-xl font-bold hover:bg-white hover:text-black transition-all duration-300"
+        >
+          Profile
+        </Link>
       </nav>
     </header>
   );

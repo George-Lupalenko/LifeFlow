@@ -1,18 +1,16 @@
 package com.lifeflow.bank.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lifeflow.bank.dto.AnalyticsSummaryDto;
 import com.lifeflow.bank.dto.UserEmailRequest;
 import com.lifeflow.bank.service.EmailStatementService;
 import com.lifeflow.bank.service.GPTAnalyticsService;
-import jakarta.mail.AuthenticationFailedException;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 

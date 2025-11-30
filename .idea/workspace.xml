@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e6d6167b-6f5a-4c83-ac50-f70faad3abcf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/easycode/codebase-v2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email-sender/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bank-statement-analytics/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bank-statement-analytics/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bank-statement-analytics/src/main/java/com/lifeflow/bank/BankStatementAnalyticsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/bank-statement-analytics/src/main/java/com/lifeflow/bank/BankStatementAnalyticsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bank-statement-analytics/src/main/java/com/lifeflow/bank/controller/AiAnalyticsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bank-statement-analytics/src/main/java/com/lifeflow/bank/controller/AiAnalyticsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bank-statement-analytics/src/main/java/com/lifeflow/bank/service/GPTAnalyticsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bank-statement-analytics/src/main/java/com/lifeflow/bank/service/GPTAnalyticsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/src/main/java/application/BookingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking/src/main/java/application/BookingApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/src/main/java/application/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking/src/main/java/application/controller/BookingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/automailer/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/automailer/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/banking/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/banking/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/booker/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/booker/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/profile/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Header/Header.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="36CB3hBo7PytfKmBg5rSsV8wdY5" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.BankStatementAnalyticsApplication.executor": "Run",
+    "Spring Boot.BookingApplication.executor": "Run",
+    "git-widget-placeholder": "Merging main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Hackaton/LifeFlow",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "prettierjs.PrettierConfiguration.Package": "D:\\Hackaton\\LifeFlow\\email-sender\\node_modules\\prettier",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Spring Boot.BookingApplication">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="LifeFlow" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="LifeFlow" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="BankStatementAnalyticsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="bank-statement-analytics" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.lifeflow.bank.BankStatementAnalyticsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BookingApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="booking" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="application.BookingApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e6d6167b-6f5a-4c83-ac50-f70faad3abcf" name="Changes" comment="" />
+      <created>1764500476398</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1764500476398</updated>
+      <workItem from="1764500477674" duration="1926000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

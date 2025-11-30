@@ -56,7 +56,7 @@ export default function BankingPage() {
     };
 
     return (
-        <div className="max-w-2xl min-w-[400px] mx-auto mt-10 p-6 bg-white/5 rounded-2xl shadow-xl border border-white/10 backdrop-blur">
+        <div className="max-w-2xl min-w-[400px] mx-auto mt-10 p-6 bg-white/5 rounded-2xl shadow-2xl border border-white/10 backdrop-blur">
             <h1 className="text-3xl font-bold text-center text-white mb-6">
                 Banking Analyze
             </h1>
