@@ -37,7 +37,7 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/booking"
+            href="/booker"
             className="px-4 py-2 rounded-xl font-bold hover:bg-white hover:text-black transition-all duration-300"
           >
             Booker
