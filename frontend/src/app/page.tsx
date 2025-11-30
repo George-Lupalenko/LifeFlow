@@ -8,7 +8,6 @@ export default function MainPage() {
   const buttons = [
     { href: '/banking', label: 'Banking' },
     { href: '/automailer', label: 'AutoMailer' },
-    { href: '/events', label: 'Event Planner' },
     { href: '/booker', label: 'Booker' },
   ];
 

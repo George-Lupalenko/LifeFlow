@@ -14,7 +14,6 @@ export default function ProfilePage() {
   const tabs = [
     { id: "emails", label: "Automailer" },
     { id: "banking", label: "Banking analysis" },
-    { id: "booking", label: "Booker" },
   ];
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="flex-1 bg-black text-white py-12 px-6 flex flex-col items-center">
+        <div className="max-w-2xl min-w-[600px] mx-auto mt-10 p-6 bg-white/5 rounded-2xl shadow-2xl border border-white/10 backdrop-blur">
       <h1 className="text-4xl font-bold text-center mb-10">Profile Settings</h1>
 
       <div className="w-full max-w-xl bg-gray-900 border border-white/20 rounded-lg shadow-lg overflow-hidden">
@@ -69,7 +68,7 @@ export default function ProfilePage() {
                 <input
                   value={localSettings.name}
                   onChange={(e) => handleFieldChange("name", e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full bg-white/5 border border-gray-700 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
 
@@ -115,12 +114,6 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
-
-          {activeTab === "booking" && (
-            <div className="space-y-4">
-              {/* To be added... */}
-            </div>
-          )}
         </div>
       </div>
 
@@ -132,6 +125,6 @@ export default function ProfilePage() {
           {saved ? "Saved!" : "Save Settings"}
         </button>
       </div>
-    </main>
+    </div>
   );
 }
