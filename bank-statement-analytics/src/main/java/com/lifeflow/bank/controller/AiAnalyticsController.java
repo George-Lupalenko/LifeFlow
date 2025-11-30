@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 @Slf4j
 @RequestMapping("/analytics")
 public class AiAnalyticsController {
