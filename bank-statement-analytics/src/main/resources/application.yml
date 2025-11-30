@@ -14,7 +14,7 @@ lifeflow:
     ai-enabled: false #true       # AI-раннер — включён
     email:
       enabled: false #true
-      lastCount: 6
+      lastCount: 12
 
   openai:
     api-key: ${LIFEFLOW_OPENAI_API_KEY}

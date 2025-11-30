@@ -2,6 +2,7 @@ package com.lifeflow.bank.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lifeflow.bank.dto.AnalyticsSummaryDto;
 import com.lifeflow.bank.dto.EmailCredentialsRequest;
 import com.lifeflow.bank.dto.UserEmailRequest;
@@ -30,6 +31,7 @@ public class AiAnalyticsController {
         long start = System.currentTimeMillis();
 
         List<AnalyticsSummaryDto> summaries = emailStatementService.fetchLastStatementsAndLogAnalytics();
+
         String result = gptAnalyticsService.generateAnalytics(summaries);
 
         long ms = System.currentTimeMillis() - start;
@@ -49,7 +51,6 @@ public class AiAnalyticsController {
             return objectMapper.createObjectNode().put("raw", result);
         }
     }
-
 
     @GetMapping("/ai/full")
     public Map<String, Object> getFullAiAnalytics() {
@@ -119,7 +120,7 @@ public class AiAnalyticsController {
     public JsonNode getUserAiAnalytics(@RequestBody UserEmailRequest req) {
         long start = System.currentTimeMillis();
 
-        // Берём аналитические данные из почты юзера
+        // 1. Тянем выписки из почты пользователя
         List<AnalyticsSummaryDto> summaries =
                 emailStatementService.fetchLastStatementsAndLogAnalytics(
                         req.imapHost(),
@@ -128,16 +129,32 @@ public class AiAnalyticsController {
                         req.lastCount()
                 );
 
-        // Генерим AI-отчёт
+        int monthsCount = summaries.size();
+        log.warn("Real months count from backend = {}", monthsCount);
+
+        // 2. GPT-репорт (строкой)
         String result = gptAnalyticsService.generateAnalytics(summaries);
 
         long ms = System.currentTimeMillis() - start;
-        log.info("AI analytics for user complete in {} ms", ms);
+        log.info("AI analytics complete in {} ms", ms);
 
         try {
-            return objectMapper.readTree(result);
+            // 3. Парсим строку в JSON
+            JsonNode node = objectMapper.readTree(result);
+
+            // 4. Насильно перезаписываем monthsCount
+            if (node.isObject()) {
+                ((ObjectNode) node).put("monthsCount", monthsCount);
+            }
+
+            return node;
         } catch (Exception e) {
-            return objectMapper.createObjectNode().put("raw", result);
+            log.error("Failed to parse GPT JSON, returning raw text", e);
+            // fallback — оборачиваем сырую строку
+            ObjectNode wrapper = objectMapper.createObjectNode();
+            wrapper.put("raw", result);
+            wrapper.put("monthsCount", monthsCount); // хотя бы тут видеть правильное число
+            return wrapper;
         }
     }
 }
