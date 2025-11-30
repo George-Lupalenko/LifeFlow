@@ -1,8 +1,8 @@
 package com.lifeflow.bank.dto;
 
 public record UserEmailRequest(
-        String imapHost,
-        String username,
-        String password,
-        int lastCount
+        String username,     // Gmail
+        String password,     // app password
+        int lastCount,       // сколько выписок брать
+        String pdfPassword   // пароль от PDF-выписок
 ) {}

@@ -23,25 +23,25 @@ public class AnalyticsController {
     private final LocalStatementFileService localStatementFileService;
     private final EmailStatementService emailStatementService;
 
-    @GetMapping("/from-local")
-    public AnalyticsSummaryDto analyzeFromLocal(@RequestParam("namePart") String namePart) throws Exception {
-        log.info("Received /api/analytics/from-local, namePart={}", namePart);
-
-        File pdf = localStatementFileService.findStatementByNamePart(namePart);
-        try (InputStream is = new FileInputStream(pdf)) {
-            List<BankTransaction> txs = pdfStatementService.parseTatraStatementPdf(is);
-            log.info("Parsed {} transactions from local PDF (namePart={})", txs.size(), namePart);
-            return analyticsService.analyze(txs);
-        }
-    }
-
-    /**
-     * GET http://localhost:8081/api/analytics/from-email
-     *
-     * Вернёт список AnalyticsSummaryDto — по одному на каждую найденную выписку из email.
-     */
-    @GetMapping("/from-email")
-    public List<AnalyticsSummaryDto> analyzeFromEmail() {
-        return emailStatementService.fetchLastStatementsAndLogAnalytics();
-    }
+//    @GetMapping("/from-local")
+//    public AnalyticsSummaryDto analyzeFromLocal(@RequestParam("namePart") String namePart) throws Exception {
+//        log.info("Received /api/analytics/from-local, namePart={}", namePart);
+//
+//        File pdf = localStatementFileService.findStatementByNamePart(namePart);
+//        try (InputStream is = new FileInputStream(pdf)) {
+//            List<BankTransaction> txs = pdfStatementService.parseTatraStatementPdf(is, null);
+//            log.info("Parsed {} transactions from local PDF (namePart={})", txs.size(), namePart);
+//            return analyticsService.analyze(txs);
+//        }
+//    }
+//
+//    /**
+//     * GET http://localhost:8081/api/analytics/from-email
+//     *
+//     * Вернёт список AnalyticsSummaryDto — по одному на каждую найденную выписку из email.
+//     */
+//    @GetMapping("/from-email")
+//    public List<AnalyticsSummaryDto> analyzeFromEmail() {
+//        return emailStatementService.fetchLastStatementsAndLogAnalytics();
+//    }
 }

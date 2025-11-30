@@ -22,34 +22,34 @@ public class PdfStatementService {
     @Value("${tatrabanka.pdf-password:}")
     private String pdfPassword;
 
+    @Value("${tatrabanka.pdf-password:}")
+    private String defaultPdfPassword;
+
     /**
      * Расшифровать PDF и распарсить транзакции. Ничего не сохраняем.
      */
-    public List<BankTransaction> parseTatraStatementPdf(InputStream pdfStream) {
-        try (PDDocument doc = load(pdfStream)) {
-            log.info("PDF document loaded successfully (encrypted={}, allPages={})",
-                    doc.isEncrypted(), doc.getNumberOfPages());
+    public List<BankTransaction> parseTatraStatementPdf(InputStream pdfStream, String pdfPassword) {
+        try (PDDocument doc = load(pdfStream, pdfPassword)) {
+
+            log.info("PDF loaded (encrypted={}, pages={})", doc.isEncrypted(), doc.getNumberOfPages());
 
             String text = new PDFTextStripper().getText(doc);
 
             TatraStatementParser.Result parsed = parser.parse(text);
-            int txCount = parsed.getTransactions() != null ? parsed.getTransactions().size() : 0;
-            log.info("Parsed statement period {} - {}, transactions={}",
-                    parsed.getPeriodFrom(), parsed.getPeriodTo(), txCount);
-
             return parsed.getTransactions();
+
         } catch (IOException e) {
-            log.error("Failed to process PDF statement", e);
+            log.error("Failed to process PDF", e);
             throw new RuntimeException("PDF parse error", e);
         }
     }
 
-    private PDDocument load(InputStream is) throws IOException {
-        if (pdfPassword == null || pdfPassword.isBlank()) {
-            log.warn("tatrabanka.pdf-password is empty, trying to open PDF without password");
+    private PDDocument load(InputStream is, String password) throws IOException {
+        if (password == null || password.isBlank()) {
+            log.warn("User PDF password is empty → opening without password");
             return PDDocument.load(is);
         }
-        log.info("Opening PDF with password from tatrabanka.pdf-password (length={})", pdfPassword.length());
-        return PDDocument.load(is, pdfPassword);
+        log.info("Opening PDF with password of length {}", password.length());
+        return PDDocument.load(is, password);
     }
 }
