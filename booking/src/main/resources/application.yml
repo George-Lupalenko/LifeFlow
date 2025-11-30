@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: booking
+
+server:
+  port: 8080
+  address: 0.0.0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+############################################
+# MOCK MODE (for testing without API keys)
+############################################
+mock:
+  amadeus:
+    enabled: true
+  booking:
+    enabled: true
+
+############################################
+# OPENAI AI CONFIG
+############################################
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+  model: gpt-4o-mini
+
+############################################
+# AMADEUS API CONFIG (Flights)
+############################################
+amadeus:
+  api:
+    key: ${AMADEUS_API_KEY}
+    secret: ${AMADEUS_API_KEY}
+    base-url: https://test.api.amadeus.com
+    # prod:
+    #   base-url: https://api.amadeus.com
+
+############################################
+# BOOKING.COM CONFIG (Hotels)
+############################################
+booking:
+  api:
+    key: ${BOOKING_API_KEY}
+    base-url: https://distribution-xml.booking.com/json
+
+############################################
+# LOGGING
+############################################
+logging:
+  level:
+    root: INFO
+    com:
+      yourcompany: DEBUG
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: DEBUG
+      apache:
+        http: DEBUG
+
+############################################
+# TIMEOUTS FOR REST TEMPLATE
+############################################
+rest:
+  connect:
+    timeout: 5000
+  read:
+    timeout: 10000
