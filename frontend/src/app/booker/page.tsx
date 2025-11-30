@@ -20,7 +20,7 @@ export default function BookerPage() {
         query: prompt,
       });
         console.log(res)
-      setResponseText(res.data.aiRecomendation || JSON.stringify(res.data));
+      setResponseText(res.data.aiRecommendation || JSON.stringify(res.data));
       setModal({ type: 'success', message: 'Plan generated successfully!' });
     } catch (err) {
       setModal({ type: 'error', message: 'Failed to generate plan.' });
