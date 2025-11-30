@@ -9,17 +9,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="booking" />
         <module name="booking-service" />
+        <module name="bank-statement-analytics" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bank-statement-analytics" target="21" />
       <module name="booking-service" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="bank-statement-analytics" options="" />
-      <module name="booking" options="-parameters" />
+      <module name="booking" options="" />
       <module name="booking-service" options="-parameters" />
     </option>
   </component>
