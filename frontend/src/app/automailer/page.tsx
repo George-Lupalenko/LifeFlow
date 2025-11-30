@@ -38,7 +38,8 @@ export default function AutoMailerPage() {
                 prompt: promtText,
             });
 
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
+                console.log(response)
                 setResponseBody(response.data.body);
                 setIsResponseOpen(true);
                 setRecentRecipients(prev => {
@@ -52,6 +53,7 @@ export default function AutoMailerPage() {
                 setEmailBody('');
                 setNotification({ message: 'Email sent successfully!', type: 'success' });
             } else {
+                console.log(response)
                 setNotification({ message: 'Failed to send email.', type: 'error' });
             }
         } catch (error) {

@@ -19,8 +19,8 @@ export default function BookerPage() {
       const res = await axios.post(process.env.NEXT_PUBLIC_BOOKER || '', {
         query: prompt,
       });
-
-      setResponseText(res.data.airecomendation || JSON.stringify(res.data));
+        console.log(res)
+      setResponseText(res.data.aiRecomendation || JSON.stringify(res.data));
       setModal({ type: 'success', message: 'Plan generated successfully!' });
     } catch (err) {
       setModal({ type: 'error', message: 'Failed to generate plan.' });
