@@ -5,8 +5,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/bank-statement-analytics/pom.xml" />
-        <option value="$PROJECT_DIR$/booking-service/pom.xml" />
-        <option value="$PROJECT_DIR$/booking/pom.xml" />
       </list>
     </option>
   </component>

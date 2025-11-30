@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+lifeflow:
+  autorun:
+    enabled: false #true          # старый email-раннер — включён
+    ai-enabled: false #true       # AI-раннер — включён
+    email:
+      enabled: false #true
+      lastCount: 12
+
+  openai:
+    api-key: ${LIFEFLOW_OPENAI_API_KEY}
